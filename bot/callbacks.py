@@ -11,3 +11,6 @@ class BudgetCallback(CallbackData, prefix="budget"):
 
 class TempCallback(CallbackData, prefix="temp"):
     temp: str
+
+class BackCallback(CallbackData, prefix="back"):
+    state: str

@@ -21,27 +21,30 @@ house_choose = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="🔘 Назад", callback_data="begin")]
 ])
 
-
-
 house_square = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text=text, callback_data=SquareCallback(size=value).pack())]
     for text, value in SQUARE_OPTS
+]+ [
+    [InlineKeyboardButton(text="🔘 Назад", callback_data=BackCallback(state="house_chosen").pack())]
 ])
-
 
 house_plot = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text=text, callback_data=PlotCallback(availability=value).pack())]
     for text, value in PLOT_OPTS
+]+ [
+    [InlineKeyboardButton(text="🔘 Назад", callback_data=BackCallback(state="house_square").pack())]
 ])
-
 
 house_budget = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text=text, callback_data=BudgetCallback(budget=value).pack())]
     for text, value in BUDGET_OPTS
+]+ [
+    [InlineKeyboardButton(text="🔘 Назад", callback_data=BackCallback(state="plot").pack())]
 ])
-
 
 house_temp = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text=text, callback_data=TempCallback(temp=value).pack())]
     for text, value in TEMP_OPTS
+]+ [
+    [InlineKeyboardButton(text="🔘 Назад", callback_data=BackCallback(state="budget").pack())]
 ])

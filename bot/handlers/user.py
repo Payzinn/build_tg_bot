@@ -75,23 +75,24 @@ async def comments(callback: CallbackQuery, callback_data: TempCallback, state: 
     await state.update_data(temp=callback_data.temp)
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="Пропустить", callback_data="skip")]
+            [InlineKeyboardButton(text="Пропустить", callback_data="skip")],
+            [InlineKeyboardButton(text="Назад", callback_data=BackCallback(state="temp").pack())]
         ]
     )
     await callback.message.edit_text("Хотите оставить комментарий, пожелания или задать вопрос?\n(Можно пропустить)", reply_markup=keyboard)
     await state.set_state(House.comment)
 
-@router.message(House.comment)
+@router.message(House.comment, F.text)
 async def phone(message: Message, state: FSMContext):
     await state.update_data(comment=message.text)
     await state.set_state(House.phone)
     await message.answer(text=contacts_message)
 
-@router.callback_query(House.comment)
+@router.callback_query(House.comment, F.data == "skip")
 async def skip_comm(callback: CallbackQuery, state: FSMContext):
     await state.update_data(comment=None)
     await state.set_state(House.phone)
-    await callback.message.answer(text=contacts_message)
+    await callback.message.edit_text(text=contacts_message)
 
 @router.message(House.phone)
 async def name(message: Message, state: FSMContext):
@@ -114,3 +115,27 @@ async def final(message: Message, state: FSMContext):
         await state.clear()
     else:
         await message.answer("Имя должно состоять из букв!")
+
+@router.callback_query(BackCallback.filter())
+async def go_back(callback: CallbackQuery, callback_data: BackCallback, state: FSMContext):
+    current_state = await state.get_state()
+    if not current_state:
+        await callback.answer("Нет предыдущего шага!")
+        return
+
+    state_map = {
+        "House:house_square": ("House:house_chosen", house_types, hello_message),
+        "House:plot": ("House:house_square", house_square, "Примерная площадь дома?"),
+        "House:budget": ("House:plot", house_plot, "У вас уже есть участок под строительство?"),
+        "House:temp": ("House:budget", house_budget, "Какой ориентировочный бюджет?"),
+        "House:comment": ("House:temp", house_temp, "Сроки:"),
+        "House:phone": ("House:comment", None, contacts_message),
+    }
+    prev_state, prev_keyboard, prev_message = state_map.get(current_state, (None, None, None))
+
+    if prev_state:
+        await state.set_state(prev_state)
+        if prev_keyboard:
+            await callback.message.edit_text(text=prev_message, reply_markup=prev_keyboard)
+        else:
+            await callback.message.edit_text(text=prev_message)
