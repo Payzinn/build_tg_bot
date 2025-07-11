@@ -48,3 +48,16 @@ house_temp = InlineKeyboardMarkup(inline_keyboard=[
 ]+ [
     [InlineKeyboardButton(text="🔘 Назад", callback_data=BackCallback(state="budget").pack())]
 ])
+
+phone_keyboard = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text="🔘 Назад", callback_data=BackCallback(state="comment").pack())]
+    ]
+)
+
+comment_keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="🔘 Пропустить", callback_data="skip")],
+            [InlineKeyboardButton(text="🔘 Назад", callback_data=BackCallback(state="temp").pack())]
+        ]
+    )
