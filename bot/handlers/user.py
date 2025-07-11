@@ -114,7 +114,8 @@ async def final(message: Message, state: FSMContext):
         await message.answer(f"Спасибо, {name}! Мы получили вашу заявку.\nНаш специалист свяжется с вами в ближайшее время\n\n📸 Пока можно посмотреть ещё примеры работ:\n👉 <a href='website-kzn.ru'>Посмотреть</a>", parse_mode="HTML", disable_web_page_preview=True)
         await state.clear()
     else:
-        await message.answer("Имя должно состоять из букв!")
+        await message.answer("Имя должно состоять из букв!\nВведите имя ещё раз: ")
+        return
 
 @router.callback_query(BackCallback.filter())
 async def go_back(callback: CallbackQuery, callback_data: BackCallback, state: FSMContext):
