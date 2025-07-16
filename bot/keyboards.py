@@ -61,3 +61,34 @@ comment_keyboard = InlineKeyboardMarkup(
             [InlineKeyboardButton(text="🔘 Назад", callback_data=BackCallback(state="temp").pack())]
         ]
     )
+
+admin_start_kb = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text="🔘 Новые Заявки", callback_data=ApplicationCallback(status="new", application_id=0, page=1).pack())],
+        [InlineKeyboardButton(text="🔘 Принятые Заявки", callback_data=ApplicationCallback(status="accepted", application_id=0, page=1).pack())]
+    ]
+)
+
+def get_applications_kb(applications, status: str, page: int, total: int):
+    builder = InlineKeyboardBuilder()
+    for i, app in enumerate(applications, 1 + (page - 1) * 10):
+        builder.add(InlineKeyboardButton(
+            text=f"Заявка №{app.id}",
+            callback_data=ViewApplicationCallback(status=status, application_id=app.id, page=page).pack()
+        ))
+    
+    total_pages = (total + 9) // 10
+    if total_pages > 1:
+        if page > 1:
+            builder.add(InlineKeyboardButton(
+                text="⬅ Назад",
+                callback_data=ViewApplicationCallback(status=status, application_id=0, page=page - 1).pack()
+            ))
+        if page < total_pages:
+            builder.add(InlineKeyboardButton(
+                text="Следующая ➡",
+                callback_data=ViewApplicationCallback(status=status, application_id=0, page=page + 1).pack()
+            ))
+    builder.adjust(1)
+    
+    return builder.as_markup()

@@ -14,3 +14,18 @@ class TempCallback(CallbackData, prefix="temp"):
 
 class BackCallback(CallbackData, prefix="back"):
     state: str
+
+class ApplicationCallback(CallbackData, prefix="app"):
+    status: str
+    application_id: int
+    page: int
+
+class ViewApplicationCallback(CallbackData, prefix="view_app"):
+    application_id: int
+    page: int
+    status: str
+
+class UpdateApplicationStatusCallback(CallbackData, prefix="update_app"):
+    application_id: int
+    status: str
+    page: int

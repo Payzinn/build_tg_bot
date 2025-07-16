@@ -141,7 +141,7 @@ async def final(message: Message, state: FSMContext):
         budget = next((text for text, value in BUDGET_OPTS if value == budget), budget)
         temp = next((text for text, value in TEMP_OPTS if value == temp), temp)
 
-        await add_application(user_id=user_get.id, username_app=name, house_chosen = house_chosen, house_square = house_square, plot = plot, budget = budget, temp=temp, comment=comment, phone = phone)
+        await add_application(user_id=user_get.id, username_app=name, house_chosen = house_chosen, house_square = house_square, plot = plot, budget = budget, temp=temp, comment=comment, phone = phone, status = "new")
         await message.answer(f"Спасибо, {name}! Мы получили вашу заявку.\nНаш специалист свяжется с вами в ближайшее время\n\n📸 Пока можно посмотреть ещё примеры работ:\n👉 <a href='website-kzn.ru'>Посмотреть</a>", parse_mode="HTML", disable_web_page_preview=True)
         await state.clear()
     else:

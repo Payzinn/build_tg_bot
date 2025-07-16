@@ -37,3 +37,10 @@ TEMP_OPTS = [
     ("🔘 Через год", "year"),
     ("🔘 Просто интересуюсь", "interested")
 ]
+
+STATUS_OPTS = [
+    ("🔘 Новые заявки", "new"),
+    ("🔘 Принятые заявки", "accepted"),
+]
+
+STATUS_MAP = {value: name for name, value in STATUS_OPTS}

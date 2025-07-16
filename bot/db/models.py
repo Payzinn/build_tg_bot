@@ -26,5 +26,5 @@ class Application(Base):
     temp = Column(String(255), nullable=False)
     comment = Column(String(255), nullable=True)
     phone = Column(String(255), nullable=False)
-    status = Column(Enum("new", "accepted", "completed", name = "application_status"), nullable=False)
+    status = Column(Enum("new", "accepted", name = "application_status"), nullable=False)
     registration_time = Column(DateTime,default=text("CURRENT_TIMESTAMP AT TIME ZONE 'Europe/Moscow'"), nullable=False)  
